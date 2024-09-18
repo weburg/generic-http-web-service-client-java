@@ -1,1 +1,1 @@
-# generic-http-web-service-client-java
+# Generic HTTP Web Service Client - Java
