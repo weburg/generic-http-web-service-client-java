@@ -1,4 +1,4 @@
-package com.weburg.http;
+package com.weburg.domain;
 
 import java.io.Serializable;
 

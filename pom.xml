@@ -12,6 +12,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <httpcomponents.version>4.5.14</httpcomponents.version>
     </properties>
     <dependencies>
         <dependency>
@@ -27,12 +28,12 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.14</version>
+            <version>${httpcomponents.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
-            <version>4.5.14</version>
+            <version>${httpcomponents.version}</version>
         </dependency>
     </dependencies>
     <repositories>
@@ -42,4 +43,17 @@
             <url>https://repo.maven.apache.org/maven2/</url>
         </repository>
     </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <mainClass>RunExampleGenericHttpWebServiceClient</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
