@@ -37,8 +37,8 @@ int engineId = httpWebService.createEngines(engine);
 First, ensure the server is running. Refer to other grouped GHoWSt projects to
 get and run the server.
 
-If using the CLI, ensure Java 8 or better and Maven are installed and that you
-are in the project directory. Run:
+If using the CLI, ensure Java JDK 8 or better and Maven 3 or better are
+installed and that you are in the project directory. Run:
 
 `mvn compile exec:java`
 
