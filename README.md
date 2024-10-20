@@ -24,10 +24,8 @@ public class RunExampleGenericHttpWebServiceClient {
         HttpWebService httpWebService = (HttpWebService) GenericHttpWebServiceClient
                 .newInstance("http://localhost:8081/generichttpws", HttpWebService.class);
 
-        Engine engine;
-
         // Create
-        engine = new Engine();
+        Engine engine = new Engine();
         engine.setName("JavaEngine");
         engine.setCylinders(44);
         engine.setThrottleSetting(49);
