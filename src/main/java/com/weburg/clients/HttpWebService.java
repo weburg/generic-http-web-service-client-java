@@ -21,5 +21,11 @@ public interface HttpWebService {
 
     void restartEngines(int id);
 
+    void stopEngines(int id);
+
+    Photo getPhotos(String name);
+
+    List<Photo> getPhotos();
+
     String createPhotos(Photo photo);
 }
