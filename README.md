@@ -29,7 +29,7 @@ public class RunExampleGenericHttpWebServiceClient {
         engine.setName("JavaEngine");
         engine.setCylinders(44);
         engine.setThrottleSetting(49);
-        int engineId = httpWebService.createEngines(engine);
+        int engineId1 = httpWebService.createEngines(engine);
     }
 }
 ```
@@ -44,7 +44,8 @@ If using the CLI, ensure you are in the project directory. Run:
 
 `mvn compile exec:java`
 
-If using an IDE, you should only need to run the below class after compiling:
+If using an IDE, you should only need to run the below file which it should
+compile and run for you:
 
 `src/main/java/RunExampleGenericHttpWebServiceClient.java`
 
