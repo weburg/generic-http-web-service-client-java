@@ -1,7 +1,4 @@
-import com.weburg.domain.Engine;
-import com.weburg.domain.Photo;
 import com.weburg.ghowst.GenericHttpWebServiceClient;
-import com.weburg.clients.HttpWebService;
 
 import java.io.File;
 import java.util.List;

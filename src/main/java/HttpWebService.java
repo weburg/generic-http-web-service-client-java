@@ -1,8 +1,3 @@
-package com.weburg.clients;
-
-import com.weburg.domain.Engine;
-import com.weburg.domain.Photo;
-
 import java.util.List;
 
 // Correlates to service class on server

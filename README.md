@@ -15,22 +15,20 @@
 ### Example code
 
 ```java
-import com.weburg.domain.Engine;
 import com.weburg.ghowst.GenericHttpWebServiceClient;
-import com.weburg.clients.HttpWebService;
 
 public class RunExampleGenericHttpWebServiceClient {
-    public static void main(String[] args) {
-        HttpWebService httpWebService = (HttpWebService) GenericHttpWebServiceClient
-                .newInstance("http://localhost:8081/generichttpws", HttpWebService.class);
+  public static void main(String[] args) {
+    HttpWebService httpWebService = (HttpWebService) GenericHttpWebServiceClient
+            .newInstance("http://localhost:8081/generichttpws", HttpWebService.class);
 
-        // Create
-        Engine engine = new Engine();
-        engine.setName("JavaEngine");
-        engine.setCylinders(44);
-        engine.setThrottleSetting(49);
-        int engineId1 = httpWebService.createEngines(engine);
-    }
+    // Create
+    Engine engine = new Engine();
+    engine.setName("JavaEngine");
+    engine.setCylinders(44);
+    engine.setThrottleSetting(49);
+    int engineId1 = httpWebService.createEngines(engine);
+  }
 }
 ```
 

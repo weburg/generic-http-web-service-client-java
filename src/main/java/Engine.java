@@ -1,5 +1,3 @@
-package com.weburg.domain;
-
 import java.io.Serializable;
 
 public class Engine implements Serializable {
