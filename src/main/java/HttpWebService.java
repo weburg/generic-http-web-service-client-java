@@ -23,4 +23,6 @@ public interface HttpWebService {
     List<Photo> getPhotos();
 
     String createPhotos(Photo photo);
+
+    void playSounds(String name);
 }
