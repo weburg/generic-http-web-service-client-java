@@ -35,7 +35,7 @@ public class RunExampleGenericHttpWebServiceClient {
 ### Running the example
 
 First, ensure the server is running. Refer to other grouped GHoWSt projects to
-get and run the server. Ensure Java JDK 8 or better and Maven 3 or better are
+get and run the server. Ensure Java JDK 11 or better and Maven 3 or better are
 installed. 
 
 If using the CLI, ensure you are in the project directory. Run:
