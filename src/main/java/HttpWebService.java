@@ -24,5 +24,13 @@ public interface HttpWebService {
 
     String createPhotos(Photo photo);
 
+    Sound getSounds(String name);
+
+    List<Sound> getSounds();
+
+    String createSounds(Sound sound);
+
     void playSounds(String name);
+
+    int raceTrucks(Truck truck1, Truck truck2);
 }

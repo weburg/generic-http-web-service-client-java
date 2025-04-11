@@ -1,4 +1,5 @@
 import com.weburg.ghowst.GenericHttpWebServiceClient;
+import com.weburg.ghowst.HttpWebServiceException;
 
 import java.io.File;
 import java.util.List;
@@ -85,5 +86,40 @@ public class RunExampleGenericHttpWebServiceClient {
 
         // Custom verb
         httpWebService.restartEngines(engineId2);
+
+        // Repeat, complex objects with different names
+        Truck truck1 = new Truck();
+        truck1.setName("Ram");
+        Engine engine1 = new Engine();
+        engine1.setName("Pentastar");
+        truck1.setEngine(engine1);
+        Truck truck2 = new Truck();
+        truck2.setName("Ford");
+        Engine engine2 = new Engine();
+        engine2.setName("Ecoboost");
+        truck2.setEngine(engine2);
+        int truckNameCompareResult = httpWebService.raceTrucks(truck1, truck2);
+
+        if (truckNameCompareResult == 0) {
+            throw new RuntimeException("Did not expect both trucks to have the same name.");
+        }
+
+        // Induce a not found error and catch it
+        try {
+            engine = httpWebService.getEngines(-2);
+            System.out.println("Engine returned: " + engine.getName());
+        } catch (HttpWebServiceException e) {
+            // TODO eventually this will be a subclass e.g. ResourceNotFoundException and it won't see leaked server details
+            System.out.println("Status: " + e.getHttpStatus() + " Message: " + e.getMessage());
+        }
+
+        // Induce a service error and catch it
+        try {
+            HttpWebService httpWebServiceWrong = (HttpWebService) GenericHttpWebServiceClient
+                    .newInstance("http://nohost:8081/generichttpws", HttpWebService.class);
+            httpWebServiceWrong.getEngines(-2);
+        } catch (HttpWebServiceException e) {
+            System.out.println("Status: " + e.getHttpStatus() + " Message: " + e.getMessage());
+        }
     }
 }

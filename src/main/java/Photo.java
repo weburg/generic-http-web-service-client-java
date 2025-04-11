@@ -1,19 +1,18 @@
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
 public class Photo implements Serializable {
     public Photo() {}
 
-    private int id;
+    private String name = "";
     private String caption = "";
-    private File photoFile;
+    private transient File photoFile = new File("");
 
-    public int getId() {
-        return this.id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public String getName() {
+        return name;
     }
 
     public String getCaption() {
@@ -30,5 +29,16 @@ public class Photo implements Serializable {
 
     public void setPhotoFile(File photoFile) {
         this.photoFile = photoFile;
+        this.name = photoFile.getName();
+
+        try {
+            File captionFile = new File(this.photoFile + ".txt");
+
+            if (getCaption().isEmpty() && captionFile.exists() && captionFile.isFile()) {
+                setCaption(FileUtils.readFileToString(captionFile));
+            }
+        } catch (IOException e) {
+            // If file didn't exist, then, let caption be what it was
+        }
     }
 }

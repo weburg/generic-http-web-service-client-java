@@ -3,6 +3,7 @@ package com.weburg.ghowst;
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -14,7 +15,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -48,7 +48,7 @@ public class HttpWebServiceInvoker {
         return qs;
     }
 
-    public Object invoke(Method method, Object[] arguments, String baseUrl) throws IOException, IllegalAccessException {
+    public Object invoke(Method method, Object[] arguments, String baseUrl) {
         String verb, entity;
 
         String methodName = method.getName();
@@ -86,122 +86,165 @@ public class HttpWebServiceInvoker {
         String json;
         Gson gson;
 
-        switch (verb) {
-            case "get":
-                client = new DefaultHttpClient();
+        try {
+            switch (verb) {
+                case "get":
+                    client = new DefaultHttpClient();
 
-                HttpGet getRequest = new HttpGet(baseUrl + "/" + entity + generateQs(arguments, method));
-                getRequest.addHeader("accept", "application/json");
-                HttpResponse getResponse = client.execute(getRequest);
+                    HttpGet getRequest = new HttpGet(baseUrl + "/" + entity + generateQs(arguments, method));
+                    getRequest.addHeader("accept", "application/json");
+                    HttpResponse getResponse = client.execute(getRequest);
+                    if (getResponse.getStatusLine().getStatusCode() >= 400 || getResponse.getStatusLine().getStatusCode() < 200) {
+                        throw new HttpWebServiceException(getResponse.getStatusLine().getStatusCode(), getResponse.getHeaders("x-error-message")[0].getValue());
+                    } else if (getResponse.getStatusLine().getStatusCode() >= 300 && getResponse.getStatusLine().getStatusCode() < 400) {
+                        throw new HttpWebServiceException(getResponse.getStatusLine().getStatusCode(), getResponse.getHeaders("location")[0].getValue());
+                    }
+                    json = new String(IOUtils.toByteArray(getResponse.getEntity().getContent()));
+                    gson = new Gson();
 
-                json = new String(IOUtils.toByteArray(getResponse.getEntity().getContent()));
-                gson = new Gson();
+                    return gson.fromJson(json, method.getGenericReturnType());
+                case "create":
+                    client = new DefaultHttpClient();
 
-                return gson.fromJson(json, method.getGenericReturnType());
-            case "create":
-                client = new DefaultHttpClient();
+                    MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+                    multipartEntityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-                MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-                multipartEntityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+                    for (Object argument : arguments) {
+                        fields = argument.getClass().getDeclaredFields();
 
-                for (Object argument : arguments) {
-                    fields = argument.getClass().getDeclaredFields();
+                        // TODO Detect when File is present ahead of time, and do multipart only then
 
-                    // TODO Detect when File is present ahead of time, and do multipart only then
+                        for (Field field : fields) {
+                            field.setAccessible(true);
 
-                    for (Field field : fields) {
-                        field.setAccessible(true);
-
-                        if (field.get(argument) instanceof File) {
-                            multipartEntityBuilder.addBinaryBody(field.getName(), (File) field.get(argument));
-                        } else {
-                            multipartEntityBuilder.addTextBody(field.getName(), field.get(argument).toString());
+                            if (field.get(argument) instanceof File) {
+                                multipartEntityBuilder.addBinaryBody(field.getName(), (File) field.get(argument));
+                            } else {
+                                multipartEntityBuilder.addTextBody(field.getName(), field.get(argument).toString());
+                            }
                         }
                     }
-                }
 
-                HttpPost postRequest = new HttpPost(baseUrl + "/" + entity);
-                postRequest.addHeader("accept", "application/json");
-                postRequest.setEntity(multipartEntityBuilder.build());
-                HttpResponse postResponse = client.execute(postRequest);
-                json = new String(IOUtils.toByteArray(postResponse.getEntity().getContent()));
-                gson = new Gson();
-
-                return gson.fromJson(json, method.getGenericReturnType());
-            case "createOrReplace":
-                // TODO support Files
-
-                client = new DefaultHttpClient();
-
-                for (Object argument : arguments) {
-                    fields = argument.getClass().getDeclaredFields();
-                    for (Field field : fields) {
-                        field.setAccessible(true);
-                        parameters.add(new BasicNameValuePair(field.getName(), field.get(argument).toString()));
+                    HttpPost postRequest = new HttpPost(baseUrl + "/" + entity);
+                    postRequest.addHeader("accept", "application/json");
+                    postRequest.setEntity(multipartEntityBuilder.build());
+                    HttpResponse postResponse = client.execute(postRequest);
+                    if (postResponse.getStatusLine().getStatusCode() >= 400 || postResponse.getStatusLine().getStatusCode() < 200) {
+                        throw new HttpWebServiceException(postResponse.getStatusLine().getStatusCode(), postResponse.getHeaders("x-error-message")[0].getValue());
+                    } else if (postResponse.getStatusLine().getStatusCode() >= 300 && postResponse.getStatusLine().getStatusCode() < 400) {
+                        throw new HttpWebServiceException(postResponse.getStatusLine().getStatusCode(), postResponse.getHeaders("location")[0].getValue());
                     }
-                }
+                    json = new String(IOUtils.toByteArray(postResponse.getEntity().getContent()));
+                    gson = new Gson();
 
-                HttpPut putRequest = new HttpPut(baseUrl + "/" + entity);
-                putRequest.addHeader("accept", "application/json");
-                putRequest.setEntity(new UrlEncodedFormEntity(parameters));
-                HttpResponse putResponse = client.execute(putRequest);
-                json = new String(IOUtils.toByteArray(putResponse.getEntity().getContent()));
-                gson = new Gson();
+                    return gson.fromJson(json, method.getGenericReturnType());
+                case "createOrReplace":
+                    // TODO support Files
 
-                return gson.fromJson(json, method.getGenericReturnType());
-            case "update":
-                // TODO support Files
+                    client = new DefaultHttpClient();
 
-                client = new DefaultHttpClient();
-
-                for (Object argument : arguments) {
-                    fields = argument.getClass().getDeclaredFields();
-                    for (Field field : fields) {
-                        field.setAccessible(true);
-                        parameters.add(new BasicNameValuePair(field.getName(), field.get(argument).toString()));
+                    for (Object argument : arguments) {
+                        fields = argument.getClass().getDeclaredFields();
+                        for (Field field : fields) {
+                            field.setAccessible(true);
+                            parameters.add(new BasicNameValuePair(field.getName(), field.get(argument).toString()));
+                        }
                     }
-                }
 
-                HttpPatch patchRequest = new HttpPatch(baseUrl + "/" + entity);
-                patchRequest.addHeader("accept", "application/json");
-                patchRequest.setEntity(new UrlEncodedFormEntity(parameters));
-                HttpResponse patchResponse = client.execute(patchRequest);
-                json = new String(IOUtils.toByteArray(patchResponse.getEntity().getContent()));
-                gson = new Gson();
+                    HttpPut putRequest = new HttpPut(baseUrl + "/" + entity);
+                    putRequest.addHeader("accept", "application/json");
+                    putRequest.setEntity(new UrlEncodedFormEntity(parameters));
+                    HttpResponse putResponse = client.execute(putRequest);
+                    if (putResponse.getStatusLine().getStatusCode() >= 400 || putResponse.getStatusLine().getStatusCode() < 200) {
+                        throw new HttpWebServiceException(putResponse.getStatusLine().getStatusCode(), putResponse.getHeaders("x-error-message")[0].getValue());
+                    } else if (putResponse.getStatusLine().getStatusCode() >= 300 && putResponse.getStatusLine().getStatusCode() < 400) {
+                        throw new HttpWebServiceException(putResponse.getStatusLine().getStatusCode(), putResponse.getHeaders("location")[0].getValue());
+                    }
+                    json = new String(IOUtils.toByteArray(putResponse.getEntity().getContent()));
+                    gson = new Gson();
 
-                return gson.fromJson(json, method.getGenericReturnType());
-            case "delete":
-                client = new DefaultHttpClient();
+                    return gson.fromJson(json, method.getGenericReturnType());
+                case "update":
+                    // TODO support Files
 
-                HttpDelete deleteRequest = new HttpDelete(baseUrl + "/" + entity + generateQs(arguments, method));
-                deleteRequest.addHeader("accept", "application/json");
-                HttpResponse deleteResponse = client.execute(deleteRequest);
+                    client = new DefaultHttpClient();
 
-                json = new String(IOUtils.toByteArray(deleteResponse.getEntity().getContent()));
-                gson = new Gson();
+                    for (Object argument : arguments) {
+                        fields = argument.getClass().getDeclaredFields();
+                        for (Field field : fields) {
+                            field.setAccessible(true);
+                            parameters.add(new BasicNameValuePair(field.getName(), field.get(argument).toString()));
+                        }
+                    }
 
-                return gson.fromJson(json, method.getGenericReturnType());
-            default:
-                // POST to a custom verb resource
+                    HttpPatch patchRequest = new HttpPatch(baseUrl + "/" + entity);
+                    patchRequest.addHeader("accept", "application/json");
+                    patchRequest.setEntity(new UrlEncodedFormEntity(parameters));
+                    HttpResponse patchResponse = client.execute(patchRequest);
+                    if (patchResponse.getStatusLine().getStatusCode() >= 400 || patchResponse.getStatusLine().getStatusCode() < 200) {
+                        throw new HttpWebServiceException(patchResponse.getStatusLine().getStatusCode(), patchResponse.getHeaders("x-error-message")[0].getValue());
+                    } else if (patchResponse.getStatusLine().getStatusCode() >= 300 && patchResponse.getStatusLine().getStatusCode() < 400) {
+                        throw new HttpWebServiceException(patchResponse.getStatusLine().getStatusCode(), patchResponse.getHeaders("location")[0].getValue());
+                    }
+                    json = new String(IOUtils.toByteArray(patchResponse.getEntity().getContent()));
+                    gson = new Gson();
 
-                // TODO support Files, better detection of objects since we might not always be getting int identifier
+                    return gson.fromJson(json, method.getGenericReturnType());
+                case "delete":
+                    client = new DefaultHttpClient();
 
-                client = new DefaultHttpClient();
+                    HttpDelete deleteRequest = new HttpDelete(baseUrl + "/" + entity + generateQs(arguments, method));
+                    deleteRequest.addHeader("accept", "application/json");
+                    HttpResponse deleteResponse = client.execute(deleteRequest);
+                    if (deleteResponse.getStatusLine().getStatusCode() >= 400 || deleteResponse.getStatusLine().getStatusCode() < 200) {
+                        throw new HttpWebServiceException(deleteResponse.getStatusLine().getStatusCode(), deleteResponse.getHeaders("x-error-message")[0].getValue());
+                    } else if (deleteResponse.getStatusLine().getStatusCode() >= 300 && deleteResponse.getStatusLine().getStatusCode() < 400) {
+                        throw new HttpWebServiceException(deleteResponse.getStatusLine().getStatusCode(), deleteResponse.getHeaders("location")[0].getValue());
+                    }
+                    json = new String(IOUtils.toByteArray(deleteResponse.getEntity().getContent()));
+                    gson = new Gson();
 
-                Parameter[] parameterDefinitions = method.getParameters();
+                    return gson.fromJson(json, method.getGenericReturnType());
+                default:
+                    // POST to a custom verb resource
 
-                for (int i = 0; i < arguments.length; i++) {
-                    parameters.add(new BasicNameValuePair(parameterDefinitions[i].getName(), arguments[i].toString()));
-                }
+                    // TODO support Files
 
-                HttpPost postCustomRequest = new HttpPost(baseUrl + "/" + entity + "/" + verb);
-                postCustomRequest.addHeader("accept", "application/json");
-                postCustomRequest.setEntity(new UrlEncodedFormEntity(parameters));
-                HttpResponse postCustomResponse = client.execute(postCustomRequest);
-                json = new String(IOUtils.toByteArray(postCustomResponse.getEntity().getContent()));
-                gson = new Gson();
+                    client = new DefaultHttpClient();
 
-                return gson.fromJson(json, method.getGenericReturnType());
+                    Parameter[] parameterDefinitions = method.getParameters();
+
+                    for (int i = 0; i < arguments.length; i++) {
+                        if (arguments[i].getClass().getName().startsWith("java.lang")) {
+                            parameters.add(new BasicNameValuePair(parameterDefinitions[i].getName(), arguments[i].toString()));
+                        } else {
+                            String objectName = parameterDefinitions[i].getName();
+                            fields = arguments[i].getClass().getDeclaredFields();
+                            for (Field field : fields) {
+                                field.setAccessible(true);
+                                parameters.add(new BasicNameValuePair(objectName + '.' + field.getName(), field.get(arguments[i]).toString()));
+                            }
+                        }
+                    }
+
+                    HttpPost postCustomRequest = new HttpPost(baseUrl + "/" + entity + "/" + verb);
+                    postCustomRequest.addHeader("accept", "application/json");
+                    postCustomRequest.setEntity(new UrlEncodedFormEntity(parameters));
+                    HttpResponse postCustomResponse = client.execute(postCustomRequest);
+                    if (postCustomResponse.getStatusLine().getStatusCode() >= 400 || postCustomResponse.getStatusLine().getStatusCode() < 200) {
+                        throw new HttpWebServiceException(postCustomResponse.getStatusLine().getStatusCode(), postCustomResponse.getHeaders("x-error-message")[0].getValue());
+                    } else if (postCustomResponse.getStatusLine().getStatusCode() >= 300 && postCustomResponse.getStatusLine().getStatusCode() < 400) {
+                        throw new HttpWebServiceException(postCustomResponse.getStatusLine().getStatusCode(), postCustomResponse.getHeaders("location")[0].getValue());
+                    }
+                    json = new String(IOUtils.toByteArray(postCustomResponse.getEntity().getContent()));
+                    gson = new Gson();
+
+                    return gson.fromJson(json, method.getGenericReturnType());
+            }
+        } catch (HttpWebServiceException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new HttpWebServiceException(HttpStatus.SC_INTERNAL_SERVER_ERROR, "There was a problem processing the web service request: " + e.getMessage());
         }
     }
 }
