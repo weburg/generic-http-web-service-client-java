@@ -3,8 +3,25 @@ import java.io.Serializable;
 public class Truck implements Serializable {
     public Truck() {}
 
+    private int id = 0;
+    private int engineId = 0;
     private String name = "";
-    private Engine engine = new Engine();
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getEngineId() {
+        return this.engineId;
+    }
+
+    public void setEngineId(int engineId) {
+        this.engineId = engineId;
+    }
 
     public String getName() {
         return this.name;
@@ -12,13 +29,5 @@ public class Truck implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Engine getEngine() {
-        return this.engine;
-    }
-
-    public void setEngine(Engine engine) {
-        this.engine = engine;
     }
 }

@@ -90,14 +90,10 @@ public class RunExampleGenericHttpWebServiceClient {
         // Repeat, complex objects with different names
         Truck truck1 = new Truck();
         truck1.setName("Ram");
-        Engine engine1 = new Engine();
-        engine1.setName("Pentastar");
-        truck1.setEngine(engine1);
+        truck1.setEngineId(engineId1);
         Truck truck2 = new Truck();
         truck2.setName("Ford");
-        Engine engine2 = new Engine();
-        engine2.setName("Ecoboost");
-        truck2.setEngine(engine2);
+        truck2.setEngineId(engineId2);
         int truckNameCompareResult = httpWebService.raceTrucks(truck1, truck2);
 
         if (truckNameCompareResult == 0) {
