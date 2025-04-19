@@ -244,7 +244,7 @@ public class HttpWebServiceInvoker {
         } catch (HttpWebServiceException e) {
             throw e;
         } catch (Exception e) {
-            throw new HttpWebServiceException(HttpStatus.SC_INTERNAL_SERVER_ERROR, "There was a problem processing the web service request: " + e.getMessage());
+            throw new HttpWebServiceException(0, "There was a problem processing the web service request: " + e.getMessage());
         }
     }
 }
