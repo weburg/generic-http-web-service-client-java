@@ -81,6 +81,7 @@ public class HttpWebServiceInvoker {
         System.out.println("Entity: " + entity);
 
         HttpClient client;
+        Parameter[] parameterDefinitions;
         Field[] fields;
         List<NameValuePair> parameters = new ArrayList<>();
         String json;
@@ -109,18 +110,21 @@ public class HttpWebServiceInvoker {
                     MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
                     multipartEntityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-                    for (Object argument : arguments) {
-                        fields = argument.getClass().getDeclaredFields();
+                    parameterDefinitions = method.getParameters();
+
+                    for (int i = 0; i < arguments.length; i++) {
+                        String objectName = parameterDefinitions[i].getName();
+                        fields = arguments[i].getClass().getDeclaredFields();
 
                         // TODO Detect when File is present ahead of time, and do multipart only then
 
                         for (Field field : fields) {
                             field.setAccessible(true);
 
-                            if (field.get(argument) instanceof File) {
-                                multipartEntityBuilder.addBinaryBody(field.getName(), (File) field.get(argument));
+                            if (field.get(arguments[i]) instanceof File) {
+                                multipartEntityBuilder.addBinaryBody(objectName + '.' + field.getName(), (File) field.get(arguments[i]));
                             } else {
-                                multipartEntityBuilder.addTextBody(field.getName(), field.get(argument).toString());
+                                multipartEntityBuilder.addTextBody(objectName + '.' + field.getName(), field.get(arguments[i]).toString());
                             }
                         }
                     }
@@ -143,11 +147,18 @@ public class HttpWebServiceInvoker {
 
                     client = new DefaultHttpClient();
 
-                    for (Object argument : arguments) {
-                        fields = argument.getClass().getDeclaredFields();
-                        for (Field field : fields) {
-                            field.setAccessible(true);
-                            parameters.add(new BasicNameValuePair(field.getName(), field.get(argument).toString()));
+                    parameterDefinitions = method.getParameters();
+
+                    for (int i = 0; i < arguments.length; i++) {
+                        if (arguments[i].getClass().getName().startsWith("java.lang")) {
+                            parameters.add(new BasicNameValuePair(parameterDefinitions[i].getName(), arguments[i].toString()));
+                        } else {
+                            String objectName = parameterDefinitions[i].getName();
+                            fields = arguments[i].getClass().getDeclaredFields();
+                            for (Field field : fields) {
+                                field.setAccessible(true);
+                                parameters.add(new BasicNameValuePair(objectName + '.' + field.getName(), field.get(arguments[i]).toString()));
+                            }
                         }
                     }
 
@@ -169,11 +180,18 @@ public class HttpWebServiceInvoker {
 
                     client = new DefaultHttpClient();
 
-                    for (Object argument : arguments) {
-                        fields = argument.getClass().getDeclaredFields();
-                        for (Field field : fields) {
-                            field.setAccessible(true);
-                            parameters.add(new BasicNameValuePair(field.getName(), field.get(argument).toString()));
+                    parameterDefinitions = method.getParameters();
+
+                    for (int i = 0; i < arguments.length; i++) {
+                        if (arguments[i].getClass().getName().startsWith("java.lang")) {
+                            parameters.add(new BasicNameValuePair(parameterDefinitions[i].getName(), arguments[i].toString()));
+                        } else {
+                            String objectName = parameterDefinitions[i].getName();
+                            fields = arguments[i].getClass().getDeclaredFields();
+                            for (Field field : fields) {
+                                field.setAccessible(true);
+                                parameters.add(new BasicNameValuePair(objectName + '.' + field.getName(), field.get(arguments[i]).toString()));
+                            }
                         }
                     }
 
@@ -212,7 +230,7 @@ public class HttpWebServiceInvoker {
 
                     client = new DefaultHttpClient();
 
-                    Parameter[] parameterDefinitions = method.getParameters();
+                    parameterDefinitions = method.getParameters();
 
                     for (int i = 0; i < arguments.length; i++) {
                         if (arguments[i].getClass().getName().startsWith("java.lang")) {
