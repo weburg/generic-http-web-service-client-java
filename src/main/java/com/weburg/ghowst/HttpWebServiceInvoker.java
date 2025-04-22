@@ -150,15 +150,11 @@ public class HttpWebServiceInvoker {
                     parameterDefinitions = method.getParameters();
 
                     for (int i = 0; i < arguments.length; i++) {
-                        if (arguments[i].getClass().getName().startsWith("java.lang")) {
-                            parameters.add(new BasicNameValuePair(parameterDefinitions[i].getName(), arguments[i].toString()));
-                        } else {
-                            String objectName = parameterDefinitions[i].getName();
-                            fields = arguments[i].getClass().getDeclaredFields();
-                            for (Field field : fields) {
-                                field.setAccessible(true);
-                                parameters.add(new BasicNameValuePair(objectName + '.' + field.getName(), field.get(arguments[i]).toString()));
-                            }
+                        String objectName = parameterDefinitions[i].getName();
+                        fields = arguments[i].getClass().getDeclaredFields();
+                        for (Field field : fields) {
+                            field.setAccessible(true);
+                            parameters.add(new BasicNameValuePair(objectName + '.' + field.getName(), field.get(arguments[i]).toString()));
                         }
                     }
 
@@ -183,15 +179,11 @@ public class HttpWebServiceInvoker {
                     parameterDefinitions = method.getParameters();
 
                     for (int i = 0; i < arguments.length; i++) {
-                        if (arguments[i].getClass().getName().startsWith("java.lang")) {
-                            parameters.add(new BasicNameValuePair(parameterDefinitions[i].getName(), arguments[i].toString()));
-                        } else {
-                            String objectName = parameterDefinitions[i].getName();
-                            fields = arguments[i].getClass().getDeclaredFields();
-                            for (Field field : fields) {
-                                field.setAccessible(true);
-                                parameters.add(new BasicNameValuePair(objectName + '.' + field.getName(), field.get(arguments[i]).toString()));
-                            }
+                        String objectName = parameterDefinitions[i].getName();
+                        fields = arguments[i].getClass().getDeclaredFields();
+                        for (Field field : fields) {
+                            field.setAccessible(true);
+                            parameters.add(new BasicNameValuePair(objectName + '.' + field.getName(), field.get(arguments[i]).toString()));
                         }
                     }
 
