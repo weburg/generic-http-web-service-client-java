@@ -3,6 +3,8 @@ import java.io.Serializable;
 public class Truck implements Serializable {
     public Truck() {}
 
+    private static final long serialVersionUID = 1L;
+
     private int id = 0;
     private int engineId = 0;
     private String name = "";

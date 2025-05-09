@@ -3,6 +3,8 @@ import java.io.Serializable;
 public class Engine implements Serializable {
     public Engine() {}
 
+    private static final long serialVersionUID = 1L;
+
     private int id = 0;
     private String name = "";
     private int cylinders = 0;

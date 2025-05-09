@@ -75,11 +75,10 @@ public class RunExampleGenericHttpWebServiceClient {
 
         // Prepare for delete
         engine = new Engine();
-        engine.setId(4);
         engine.setName("JavaEngine4ToDelete");
         engine.setCylinders(89);
         engine.setThrottleSetting(70);
-        int engineId4 = httpWebService.createOrReplaceEngines(engine);
+        int engineId4 = httpWebService.createEngines(engine);
 
         // Delete
         httpWebService.deleteEngines(engineId4);

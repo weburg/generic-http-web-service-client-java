@@ -7,6 +7,8 @@ import java.io.Serializable;
 public class Photo implements Serializable {
     public Photo() {}
 
+    private static final long serialVersionUID = 1L;
+
     private String name = "";
     private String caption = "";
     private transient File photoFile = new File("");

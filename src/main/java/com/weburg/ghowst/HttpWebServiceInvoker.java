@@ -54,27 +54,23 @@ public class HttpWebServiceInvoker {
 
         if (methodName.indexOf("get") == 0) {
             verb = "get";
-            entity = getEntityName(methodName, verb);
         } else if (methodName.indexOf("createOrReplace") == 0) {
             verb = "createOrReplace";
-            entity = getEntityName(methodName, verb);
         } else if (methodName.indexOf("create") == 0) {
             verb = "create";
-            entity = getEntityName(methodName, verb);
         } else if (methodName.indexOf("update") == 0) {
             verb = "update";
-            entity = getEntityName(methodName, verb);
         } else if (methodName.indexOf("delete") == 0) {
             verb = "delete";
-            entity = getEntityName(methodName, verb);
         } else {
             String lcFirstCharOfMethodName = methodName.substring(0, 1).toLowerCase() + methodName.substring(1);
 
             String[] parts = lcFirstCharOfMethodName.split("(?=[A-Z])");
 
             verb = parts[0].toLowerCase();
-            entity = getEntityName(methodName, verb);
         }
+
+        entity = getEntityName(methodName, verb);
 
         System.out.println("Verb: " + verb);
         System.out.println("Entity: " + entity);

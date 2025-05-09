@@ -4,6 +4,8 @@ import java.io.Serializable;
 public class Sound implements Serializable {
     public Sound() {}
 
+    private static final long serialVersionUID = 1L;
+
     private String name = "";
     private transient File soundFile = new File("");
 
