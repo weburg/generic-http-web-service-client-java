@@ -10,13 +10,13 @@ public interface HttpWebService {
 
     int createOrReplaceEngines(Engine engine);
 
-    void updateEngines(Engine engine);
+    int updateEngines(Engine engine);
 
     void deleteEngines(int id);
 
-    void restartEngines(int id);
+    int restartEngines(int id);
 
-    void stopEngines(int id);
+    int stopEngines(int id);
 
     Photo getPhotos(String name);
 

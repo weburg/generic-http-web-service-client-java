@@ -20,7 +20,7 @@ public class GenericHttpWebServiceClient implements java.lang.reflect.Invocation
         this.httpWebServiceInvoker = new HttpWebServiceInvoker();
     }
 
-    public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] arguments) {
         return httpWebServiceInvoker.invoke(method, arguments, this.baseUrl);
     }
 }
