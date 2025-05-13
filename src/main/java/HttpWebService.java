@@ -32,5 +32,5 @@ public interface HttpWebService {
 
     void playSounds(String name);
 
-    int raceTrucks(Truck truck1, Truck truck2);
+    String raceTrucks(Truck truck1, Truck truck2);
 }

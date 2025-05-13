@@ -93,11 +93,9 @@ public class RunExampleGenericHttpWebServiceClient {
         Truck truck2 = new Truck();
         truck2.setName("Ford");
         truck2.setEngineId(engineId2);
-        int truckNameCompareResult = httpWebService.raceTrucks(truck1, truck2);
+        String truckResult = httpWebService.raceTrucks(truck1, truck2);
 
-        if (truckNameCompareResult == 0) {
-            throw new RuntimeException("Did not expect both trucks to have the same name.");
-        }
+        System.out.println("Race result: " + truckResult);
 
         // Induce a not found error and catch it
         try {
