@@ -9,13 +9,13 @@ public class RunExampleGenericHttpWebServiceClient {
         HttpWebService httpWebService = (HttpWebService) GenericHttpWebServiceClient
                 .newInstance("http://localhost:8081/generichttpws", HttpWebService.class);
 
-        /*** Photo ***/
+        /*** Image ***/
 
         // Create
-        Photo photo = new Photo();
-        photo.setCaption("Some Java K");
-        photo.setPhotoFile(new File("JAVA.JPG"));
-        httpWebService.createPhotos(photo);
+        Image image = new Image();
+        image.setCaption("Some Java K");
+        image.setImageFile(new File("JAVA.JPG"));
+        httpWebService.createImages(image);
 
         /*** Engine ***/
 
