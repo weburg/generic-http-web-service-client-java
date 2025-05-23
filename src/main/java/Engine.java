@@ -1,8 +1,5 @@
-import java.beans.BeanProperty;
-import java.beans.JavaBean;
 import java.io.Serializable;
 
-@JavaBean(description = "Used as an example resource and something that can really move a project along")
 public class Engine implements Serializable {
     public Engine() {}
 
@@ -13,7 +10,6 @@ public class Engine implements Serializable {
     private int cylinders = 0;
     private int throttleSetting = 0;
 
-    @BeanProperty(description = "The unique id of the engine")
     public int getId() {
         return this.id;
     }

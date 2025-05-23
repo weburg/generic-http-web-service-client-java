@@ -1,7 +1,4 @@
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 
 public class Video implements Serializable {
@@ -15,6 +12,10 @@ public class Video implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCaption() {
@@ -31,16 +32,5 @@ public class Video implements Serializable {
 
     public void setVideoFile(File videoFile) {
         this.videoFile = videoFile;
-        this.name = videoFile.getName();
-
-        try {
-            File captionFile = new File(videoFile.getAbsolutePath() + ".txt");
-
-            if ((getCaption() == null || getCaption().isEmpty()) && captionFile.exists() && captionFile.isFile()) {
-                setCaption(FileUtils.readFileToString(captionFile));
-            }
-        } catch (IOException e) {
-            // If file didn't exist, then, let caption be what it was
-        }
     }
 }

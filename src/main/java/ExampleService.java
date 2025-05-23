@@ -1,11 +1,5 @@
-import com.weburg.ghowst.DescriptionInOut;
-import jdk.jfr.Description;
-import jdk.jfr.Name;
-
 import java.util.List;
 
-@Name("Generic HTTP Web Service")
-@Description("An example service showing the power of GHoWSt")
 public interface ExampleService {
     Sound getSounds(String name);
 
@@ -27,13 +21,11 @@ public interface ExampleService {
 
     String createVideos(Video video);
 
-    @Description("Gets a list of Engines based on the id")
     Engine getEngines(int id);
 
     List<Engine> getEngines();
 
-    @Description("Create a new engine")
-    @DescriptionInOut("The id of the created engine") int createEngines(@DescriptionInOut("The engine to create") Engine engine);
+    int createEngines(Engine engine);
 
     int createOrReplaceEngines(Engine engine);
 
