@@ -6,8 +6,8 @@ import java.util.List;
 
 public class RunExampleGenericHttpWebServiceClient {
     public static void main(String[] args) {
-        HttpWebService httpWebService = (HttpWebService) GenericHttpWebServiceClient
-                .newInstance("http://localhost:8081/generichttpws", HttpWebService.class);
+        ExampleService httpWebService = (ExampleService) GenericHttpWebServiceClient
+                .newInstance("http://localhost:8081/generichttpws", ExampleService.class);
 
         /*** Image ***/
 
@@ -108,8 +108,8 @@ public class RunExampleGenericHttpWebServiceClient {
 
         // Induce a service error and catch it
         try {
-            HttpWebService httpWebServiceWrong = (HttpWebService) GenericHttpWebServiceClient
-                    .newInstance("http://nohost:8081/generichttpws", HttpWebService.class);
+            ExampleService httpWebServiceWrong = (ExampleService) GenericHttpWebServiceClient
+                    .newInstance("http://nohost:8081/generichttpws", ExampleService.class);
             httpWebServiceWrong.getEngines(-2);
         } catch (HttpWebServiceException e) {
             System.out.println("Status: " + e.getHttpStatus() + " Message: " + e.getMessage());

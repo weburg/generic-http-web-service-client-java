@@ -6,7 +6,7 @@ import java.util.List;
 
 @Name("Generic HTTP Web Service")
 @Description("An example service showing the power of GHoWSt")
-public interface HttpWebService {
+public interface ExampleService {
     Sound getSounds(String name);
 
     List<Sound> getSounds();
