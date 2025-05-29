@@ -1,3 +1,5 @@
+package example;
+
 import java.io.Serializable;
 
 public class Truck implements Serializable {

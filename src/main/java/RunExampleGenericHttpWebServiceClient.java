@@ -1,5 +1,9 @@
 import com.weburg.ghowst.GenericHttpWebServiceClient;
 import com.weburg.ghowst.HttpWebServiceException;
+import example.Engine;
+import example.ExampleService;
+import example.Image;
+import example.Truck;
 
 import java.io.File;
 import java.util.List;
@@ -9,7 +13,7 @@ public class RunExampleGenericHttpWebServiceClient {
         ExampleService httpWebService = (ExampleService) GenericHttpWebServiceClient
                 .newInstance("http://localhost:8081/generichttpws", ExampleService.class);
 
-        /*** Image ***/
+        /*** example.Image ***/
 
         // Create
         Image image = new Image();
@@ -17,7 +21,7 @@ public class RunExampleGenericHttpWebServiceClient {
         image.setImageFile(new File("JAVA.JPG"));
         httpWebService.createImages(image);
 
-        /*** Engine ***/
+        /*** example.Engine ***/
 
         Engine engine;
 
@@ -67,7 +71,7 @@ public class RunExampleGenericHttpWebServiceClient {
 
         // Get
         engine = httpWebService.getEngines(engineId1);
-        System.out.println("Engine returned: " + engine.getName());
+        System.out.println("example.Engine returned: " + engine.getName());
 
         // Get all
         List<Engine> engines = httpWebService.getEngines();
@@ -100,7 +104,7 @@ public class RunExampleGenericHttpWebServiceClient {
         // Induce a not found error and catch it
         try {
             engine = httpWebService.getEngines(-2);
-            System.out.println("Engine returned: " + engine.getName());
+            System.out.println("example.Engine returned: " + engine.getName());
         } catch (HttpWebServiceException e) {
             // TODO eventually this will be a subclass e.g. ResourceNotFoundException and it won't see leaked server details
             System.out.println("Status: " + e.getHttpStatus() + " Message: " + e.getMessage());

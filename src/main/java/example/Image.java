@@ -1,14 +1,16 @@
+package example;
+
 import java.io.File;
 import java.io.Serializable;
 
-public class Sound implements Serializable {
-    public Sound() {}
+public class Image implements Serializable {
+    public Image() {}
 
     private static final long serialVersionUID = 1L;
 
     private String name = "";
     private String caption = "";
-    private transient File soundFile = new File("");
+    private transient File imageFile = new File("");
 
     public String getName() {
         return name;
@@ -26,11 +28,11 @@ public class Sound implements Serializable {
         this.caption = caption;
     }
 
-    public File getSoundFile() {
-        return this.soundFile;
+    public File getImageFile() {
+        return this.imageFile;
     }
 
-    public void setSoundFile(File soundFile) {
-        this.soundFile = soundFile;
+    public void setImageFile(File imageFile) {
+        this.imageFile = imageFile;
     }
 }

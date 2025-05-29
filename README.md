@@ -16,19 +16,21 @@
 
 ```java
 import com.weburg.ghowst.GenericHttpWebServiceClient;
+import example.Engine;
+import example.ExampleService;
 
 public class RunExampleGenericHttpWebServiceClient {
-  public static void main(String[] args) {
-    ExampleService httpWebService = (ExampleService) GenericHttpWebServiceClient
-            .newInstance("http://localhost:8081/generichttpws", ExampleService.class);
-
-    // Create
-    Engine engine = new Engine();
-    engine.setName("JavaEngine");
-    engine.setCylinders(44);
-    engine.setThrottleSetting(49);
-    int engineId1 = httpWebService.createEngines(engine);
-  }
+    public static void main(String[] args) {
+        ExampleService httpWebService = (ExampleService) GenericHttpWebServiceClient
+                .newInstance("http://localhost:8081/generichttpws", ExampleService.class);
+    
+        // Create
+        Engine engine = new Engine();
+        engine.setName("JavaEngine");
+        engine.setCylinders(44);
+        engine.setThrottleSetting(49);
+        int engineId1 = httpWebService.createEngines(engine);
+    }
 }
 ```
 
@@ -49,3 +51,13 @@ compile and run for you:
 
 The example runs several calls to create, update, replace, read, delete, and do
 a custom action on resources.
+
+### Running the tests
+
+To run unit tests only:
+
+`mvn test`
+
+To run unit and integration tests:
+
+`mvn verify`
