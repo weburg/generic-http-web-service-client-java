@@ -8,7 +8,7 @@ class GenericHttpWebServiceClientTest {
     TestService testService = (TestService) GenericHttpWebServiceClient.newInstance("http://nohost/noservice", TestService.class);
 
     @Test
-    void invoke() {
+    void createTestResource() {
         assertThrowsExactly(HttpWebServiceException.class, () -> {
             testService.createResource(new TestResource());
         });
