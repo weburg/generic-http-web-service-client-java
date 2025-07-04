@@ -1,16 +1,23 @@
 package com.weburg.ghowst;
 
+import example.Engine;
+import example.ExampleService;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GenericHttpWebServiceClientTest {
-    TestService testService = (TestService) GenericHttpWebServiceClient.newInstance("http://nohost/noservice", TestService.class);
+    ExampleService testService = (ExampleService) GenericHttpWebServiceClient.newInstance("http://nohost/noservice", ExampleService.class);
 
     @Test
-    void createTestResource() {
+    void serviceException() {
+        Engine engine = new Engine();
+        engine.setName("JavaTestEngine");
+        engine.setCylinders(12);
+        engine.setThrottleSetting(50);
+
         assertThrowsExactly(HttpWebServiceException.class, () -> {
-            testService.createResource(new TestResource());
+            testService.createEngines(engine);
         });
     }
 }

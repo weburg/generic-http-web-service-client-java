@@ -19,7 +19,7 @@ import com.weburg.ghowst.GenericHttpWebServiceClient;
 import example.Engine;
 import example.ExampleService;
 
-public class RunExampleGenericHttpWebServiceClient {
+public class example.RunExampleGenericHttpWebServiceClient {
     public static void main(String[] args) {
         ExampleService httpWebService = (ExampleService) GenericHttpWebServiceClient
                 .newInstance("http://localhost:8081/generichttpws", ExampleService.class);
@@ -47,7 +47,7 @@ If using the CLI, ensure you are in the project directory. Run:
 If using an IDE, you should only need to run the below file which it should
 compile and run for you:
 
-`src/main/java/RunExampleGenericHttpWebServiceClient.java`
+`src/main/java/example/RunExampleGenericHttpWebServiceClient.java`
 
 The example runs several calls to create, update, replace, read, delete, and do
 a custom action on resources.

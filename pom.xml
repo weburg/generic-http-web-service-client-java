@@ -67,7 +67,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.4.1</version>
                 <configuration>
-                    <mainClass>RunExampleGenericHttpWebServiceClient</mainClass>
+                    <mainClass>example.RunExampleGenericHttpWebServiceClient</mainClass>
                 </configuration>
             </plugin>
             <plugin>

@@ -1,9 +1,7 @@
+package example;
+
 import com.weburg.ghowst.GenericHttpWebServiceClient;
 import com.weburg.ghowst.HttpWebServiceException;
-import example.Engine;
-import example.ExampleService;
-import example.Image;
-import example.Truck;
 
 import java.io.File;
 import java.util.List;
