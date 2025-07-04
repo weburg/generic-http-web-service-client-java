@@ -63,8 +63,7 @@ public class RunExampleGenericHttpWebServiceClient {
         int engineId3 = httpWebService.createEngines(engine);
 
         // Update
-        // NOTE, for Java, we will reuse the engine from above. Dynamic languages can update individual fields by
-        // creating a new object and setting the id to an existing object. However, updates should use acquired objects.
+        engine = new Engine();
         engine.setId(engineId3);
         engine.setName("JavaEngine3Updated");
         httpWebService.updateEngines(engine);
@@ -106,7 +105,7 @@ public class RunExampleGenericHttpWebServiceClient {
             engine = httpWebService.getEngines(-2);
             System.out.println("example.Engine returned: " + engine.getName());
         } catch (HttpWebServiceException e) {
-            // TODO eventually this will be a subclass e.g. ResourceNotFoundException and it won't see leaked server details
+            // TODO eventually this will be a subclass e.g. ResourceNotFoundException
             System.out.println("Status: " + e.getHttpStatus() + " Message: " + e.getMessage());
         }
 
