@@ -19,7 +19,7 @@ public class RunExampleGenericHttpWebServiceClient {
         image.setImageFile(new File("JAVA.JPG"));
         httpWebService.createImages(image);
 
-        /*** example.Engine ***/
+        /*** Engine ***/
 
         Engine engine;
 
@@ -68,7 +68,7 @@ public class RunExampleGenericHttpWebServiceClient {
 
         // Get
         engine = httpWebService.getEngines(engineId1);
-        System.out.println("example.Engine returned: " + engine.getName());
+        System.out.println("Engine returned: " + engine.getName());
 
         // Get all
         List<Engine> engines = httpWebService.getEngines();
@@ -101,7 +101,7 @@ public class RunExampleGenericHttpWebServiceClient {
         // Induce a not found error and catch it
         try {
             engine = httpWebService.getEngines(-2);
-            System.out.println("example.Engine returned: " + engine.getName());
+            System.out.println("Engine returned: " + engine.getName());
         } catch (HttpWebServiceException e) {
             // TODO eventually this will be a subclass e.g. ResourceNotFoundException
             System.out.println("Status: " + e.getHttpStatus() + " Message: " + e.getMessage());

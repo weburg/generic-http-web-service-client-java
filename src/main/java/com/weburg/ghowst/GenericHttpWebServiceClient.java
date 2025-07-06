@@ -3,8 +3,8 @@ package com.weburg.ghowst;
 import java.lang.reflect.Method;
 
 public class GenericHttpWebServiceClient implements java.lang.reflect.InvocationHandler {
-    private String baseUrl;
-    private HttpWebServiceInvoker httpWebServiceInvoker;
+    private final String baseUrl;
+    private final HttpWebServiceInvoker httpWebServiceInvoker;
 
     public static Object newInstance(String baseUrl, Class webServiceClass) {
         Class[] interfaceArray = {webServiceClass};

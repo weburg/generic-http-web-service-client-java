@@ -6,7 +6,7 @@ public class HttpWebServiceException extends RuntimeException {
     // TODO this is probably best made a checked exception, many things can
     // go wrong with web services.
 
-    private int httpStatus;
+    private final int httpStatus;
 
     public HttpWebServiceException(int httpStatus, String message) {
         super(message);
