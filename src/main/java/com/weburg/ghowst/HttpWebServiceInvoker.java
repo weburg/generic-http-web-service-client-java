@@ -153,46 +153,47 @@ public class HttpWebServiceInvoker {
         LOGGER.info("Resource: " + resource);
 
         HttpEntity httpEntity;
+        HttpRequestBase request;
 
         try {
             switch (verb) {
                 case "get":
-                    HttpGet getRequest = new HttpGet(baseUrl + "/" + resource + generateQs(arguments, method.getParameters()));
+                    request = new HttpGet(baseUrl + "/" + resource + generateQs(arguments, method.getParameters()));
 
-                    return executeAndHandle(getRequest, method);
+                    return executeAndHandle(request, method);
                 case "create":
-                    HttpPost postRequest = new HttpPost(baseUrl + "/" + resource);
+                    request = new HttpPost(baseUrl + "/" + resource);
 
                     httpEntity = httpEntityFromArguments(method.getParameters(), arguments);
-                    postRequest.setEntity(httpEntity);
+                    ((HttpPost)request).setEntity(httpEntity);
 
-                    return executeAndHandle(postRequest, method);
+                    return executeAndHandle(request, method);
                 case "createOrReplace":
-                    HttpPut putRequest = new HttpPut(baseUrl + "/" + resource);
+                    request = new HttpPut(baseUrl + "/" + resource);
 
                     httpEntity = httpEntityFromArguments(method.getParameters(), arguments);
-                    putRequest.setEntity(httpEntity);
+                    ((HttpPut)request).setEntity(httpEntity);
 
-                    return executeAndHandle(putRequest, method);
+                    return executeAndHandle(request, method);
                 case "update":
-                    HttpPatch patchRequest = new HttpPatch(baseUrl + "/" + resource);
+                    request = new HttpPatch(baseUrl + "/" + resource);
 
                     httpEntity = httpEntityFromArguments(method.getParameters(), arguments);
-                    patchRequest.setEntity(httpEntity);
+                    ((HttpPatch)request).setEntity(httpEntity);
 
-                    return executeAndHandle(patchRequest, method);
+                    return executeAndHandle(request, method);
                 case "delete":
-                    HttpDelete deleteRequest = new HttpDelete(baseUrl + "/" + resource + generateQs(arguments, method.getParameters()));
+                    request = new HttpDelete(baseUrl + "/" + resource + generateQs(arguments, method.getParameters()));
 
-                    return executeAndHandle(deleteRequest, method);
+                    return executeAndHandle(request, method);
                 default:
                     // POST to a custom verb resource
-                    HttpPost postCustomRequest = new HttpPost(baseUrl + "/" + resource + "/" + verb);
+                    request = new HttpPost(baseUrl + "/" + resource + "/" + verb);
 
                     httpEntity = httpEntityFromArguments(method.getParameters(), arguments);
-                    postCustomRequest.setEntity(httpEntity);
+                    ((HttpPost)request).setEntity(httpEntity);
 
-                    return executeAndHandle(postCustomRequest, method);
+                    return executeAndHandle(request, method);
             }
         } catch (HttpWebServiceException e) {
             throw e;
