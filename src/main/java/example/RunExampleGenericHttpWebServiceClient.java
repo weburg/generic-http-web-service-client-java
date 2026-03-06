@@ -61,7 +61,6 @@ public class RunExampleGenericHttpWebServiceClient {
         int engineId3 = httpWebService.createEngines(engine);
 
         // Update
-        engine = new Engine();
         engine.setId(engineId3);
         engine.setName("JavaEngine3Updated");
         httpWebService.updateEngines(engine);
