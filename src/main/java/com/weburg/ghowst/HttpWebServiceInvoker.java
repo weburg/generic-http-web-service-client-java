@@ -72,6 +72,10 @@ public class HttpWebServiceInvoker {
         boolean hasFile = false;
 
         for (Object argument : arguments) {
+            if (argument == null || argument.getClass().getName().startsWith("java.")) {
+                continue;
+            }
+
             Field[] fields = argument.getClass().getDeclaredFields();
 
             for (Field field : fields) {
@@ -88,7 +92,7 @@ public class HttpWebServiceInvoker {
         multipartEntityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
         for (int i = 0; i < arguments.length; i++) {
-            if (arguments[i].getClass().getName().startsWith("java.lang")) {
+            if (arguments[i].getClass().getName().startsWith("java.")) {
                 if (!hasFile) {
                     parameters.add(new BasicNameValuePair(parameterDefinitions[i].getName(), arguments[i].toString()));
                 } else {
