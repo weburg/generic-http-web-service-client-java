@@ -14,6 +14,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <httpcomponents.version>4.5.14</httpcomponents.version>
     </properties>
+
+    <developers>
+        <developer>
+            <name>Wren Weburg</name>
+            <email>wren@weburg.com</email>
+        </developer>
+    </developers>
+
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>
