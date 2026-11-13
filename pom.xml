@@ -7,7 +7,7 @@
     <groupId>com.weburg</groupId>
     <artifactId>generic-http-web-service-client-java</artifactId>
     <version>1.0.0</version>
-    <name>GHoWSt Server</name>
+    <name>GHoWSt Client</name>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
